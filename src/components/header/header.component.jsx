@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 
+// connct is a higher order component that lets us modify our component to have access to things related to redux
+import { connect } from "react-redux";
+
 import { auth } from "../../firebase/firebase.utils";
 import "./header.styles.scss";
 
@@ -33,4 +36,11 @@ const Header = ({ currentUser }) => {
     );
 };
 
-export default Header;
+const mapStateToProps = (state) => {
+    return {
+        currentUser: state.user.currentUser,
+    };
+};
+
+// The connect() function connects a React component to a Redux store.
+export default connect(mapStateToProps)(Header);
