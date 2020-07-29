@@ -1,12 +1,12 @@
 import React from "react";
 import "./App.css";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import Homepage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
-import SignInAndSignUp from ".//pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
+import SignInAndSignUpPage from ".//pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 
 import { setCurrentUser } from "./redux/user/user.actions";
 
@@ -20,14 +20,14 @@ class App extends React.Component {
         this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
             if (userAuth) {
                 const userRef = await createUserProfileDocument(userAuth);
-
                 userRef.onSnapshot((snapshot) => {
                     setCurrentUser({
                         id: snapshot.id,
-                        ...snapshot.data,
+                        ...snapshot.data(),
                     });
                 });
             }
+
             setCurrentUser(userAuth);
         });
     }
@@ -41,12 +41,29 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path="/" component={Homepage} />
                     <Route path="/shop" component={ShopPage} />
-                    <Route path="/signin" component={SignInAndSignUp} />
+                    <Route
+                        exact
+                        path="/signin"
+                        render={() =>
+                            this.props.currentUser ? (
+                                <Redirect to="/" />
+                            ) : (
+                                <SignInAndSignUpPage />
+                            )
+                        }
+                    />
                 </Switch>
             </div>
         );
     }
 }
+
+// destructured from state - {user}, / we are doing this to have access to this.props.CurrentUser and be able to know if there's current active user
+const mapStateToProps = ({ user }) => {
+    return {
+        currentUser: user.currentUser,
+    };
+};
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -55,4 +72,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 // we pass null because unlike in the header componnt we don't need props from reducer
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
