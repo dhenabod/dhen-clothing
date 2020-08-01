@@ -3,10 +3,13 @@ import "./App.css";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
+import { createStructuredSelector } from "reselect";
 import Homepage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
+import CheckoutPage from "./pages/checkout/checkout.component";
 import Header from "./components/header/header.component";
 import SignInAndSignUpPage from ".//pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
+import { selectCurrentUser } from "./redux/user/user.selector";
 
 import { setCurrentUser } from "./redux/user/user.actions";
 
@@ -34,6 +37,21 @@ class App extends React.Component {
     componentWillUnmount() {
         this.unsubscribeFromAuth();
     }
+    redirectIfLogged = () => {
+        if (this.props.currentUser) {
+            return <Redirect to="/" />;
+        } else {
+            return <SignInAndSignUpPage />;
+        }
+        // method inside the jsx
+        // () =>
+        //     this.props.currentUser ? (
+        //         <Redirect to="/" />
+        //     ) : (
+        //         <SignInAndSignUpPage />
+        //     );
+    };
+
     render() {
         return (
             <div>
@@ -41,16 +59,11 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path="/" component={Homepage} />
                     <Route path="/shop" component={ShopPage} />
+                    <Route exact path="/checkout" component={CheckoutPage} />
                     <Route
                         exact
                         path="/signin"
-                        render={() =>
-                            this.props.currentUser ? (
-                                <Redirect to="/" />
-                            ) : (
-                                <SignInAndSignUpPage />
-                            )
-                        }
+                        render={this.redirectIfLogged}
                     />
                 </Switch>
             </div>
@@ -58,13 +71,18 @@ class App extends React.Component {
     }
 }
 
+// not using createStructuredSelector
 // destructured from state - {user}, / we are doing this to have access to this.props.CurrentUser and be able to know if there's current active user
-const mapStateToProps = ({ user }) => {
-    return {
-        currentUser: user.currentUser,
-    };
-};
+// const mapStateToProps = ({ user }) => {
+//     return {
+//         currentUser: user.currentUser,
+//     };
+// };
 
+// using createStructuredSelector
+const mapStateToProps = createStructuredSelector({
+    currentUser: selectCurrentUser,
+});
 const mapDispatchToProps = (dispatch) => {
     return {
         setCurrentUser: (user) => dispatch(setCurrentUser(user)),
