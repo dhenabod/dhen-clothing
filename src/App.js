@@ -91,3 +91,5 @@ const mapDispatchToProps = (dispatch) => {
 
 // we pass null because unlike in the header componnt we don't need props from reducer
 export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+//  heroku create dhen-clothing --buildpack https://github.com/mars/create-react-app-buildpack.git
