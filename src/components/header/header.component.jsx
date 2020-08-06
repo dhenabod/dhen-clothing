@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { ReactComponent as Logo } from "../../assets/crown.svg";
 
 // connct is a higher order component that lets us modify our component to have access to things related to redux
@@ -12,35 +11,35 @@ import CartIcon from "../cart-icon/cart-icon.component";
 import { selectCartHidden } from "../../redux/cart/cart.selectors";
 import { selectCurrentUser } from "../../redux/user/user.selector";
 
-import "./header.styles.scss";
+import {
+    HeaderContainer,
+    LogoContainer,
+    OptionsContainer,
+    OptionLink,
+    OptionDiv,
+} from "./header.styles";
 
 // current user is from App.js
 const Header = ({ currentUser, hidden }) => {
     return (
-        <div className="header">
-            <Link className="logo-container" to="/">
+        <HeaderContainer>
+            <LogoContainer to="/">
                 <Logo className="logo"></Logo>
-            </Link>
-            <div className="options">
-                <Link className="option" to="/shop">
-                    SHOP
-                </Link>
-                <Link className="option" to="/contact">
-                    CONTACT
-                </Link>
+            </LogoContainer>
+            <OptionsContainer>
+                <OptionLink to="/shop">SHOP</OptionLink>
+                <OptionLink to="/contact">CONTACT</OptionLink>
                 {currentUser ? (
-                    <div className="option" onClick={() => auth.signOut()}>
+                    <OptionDiv onClick={() => auth.signOut()}>
                         SIGN OUT
-                    </div>
+                    </OptionDiv>
                 ) : (
-                    <Link className="option" to="/signin">
-                        SIGN IN
-                    </Link>
+                    <OptionLink to="/signin">SIGN IN</OptionLink>
                 )}
                 <CartIcon />
-            </div>
+            </OptionsContainer>
             {!hidden ? <CartDropdown></CartDropdown> : null}
-        </div>
+        </HeaderContainer>
     );
 };
 

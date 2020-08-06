@@ -6,11 +6,11 @@ import CollectionPreview from "../collection-preview/collection-preview.componen
 
 import { selectCollectionsForPreview } from "../../redux/shop/shop.selector";
 
-import "./collections-overview.styles.scss";
+import { CollectionsOverviewContainer } from "./collections-overview.styles";
 
 const CollectionsOverview = ({ collections }) => {
     return (
-        <div className="collections-overview">
+        <CollectionsOverviewContainer>
             {collections.map(({ id, ...otherCollectionProps }) => {
                 return (
                     <CollectionPreview
@@ -19,7 +19,7 @@ const CollectionsOverview = ({ collections }) => {
                     ></CollectionPreview>
                 );
             })}
-        </div>
+        </CollectionsOverviewContainer>
     );
 };
 

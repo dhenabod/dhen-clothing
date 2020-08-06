@@ -11,13 +11,17 @@ import { selectCartItems } from "../../redux/cart/cart.selectors";
 
 import { toggleCartHidden } from "../../redux/cart/cart.actions";
 
-import "./cart-dropdown.styles.scss";
+import {
+    CartDropdownContainer,
+    CartItemsContainer,
+    EmptyMessageContainer,
+} from "./cart-dropdown.styles";
 
 // we have access to history because of withRouter
 const CartDropdown = ({ cartItems, history, dispatch }) => {
     return (
-        <div className="cart-dropdown">
-            <div className="cart-items">
+        <CartDropdownContainer>
+            <CartItemsContainer>
                 {cartItems.length ? (
                     cartItems.map((cartItem) => {
                         return (
@@ -28,9 +32,11 @@ const CartDropdown = ({ cartItems, history, dispatch }) => {
                         );
                     })
                 ) : (
-                    <span className="empty-message">Your cart is empty</span>
+                    <EmptyMessageContainer>
+                        Your cart is empty
+                    </EmptyMessageContainer>
                 )}
-            </div>
+            </CartItemsContainer>
             <CustomButton
                 onClick={() => {
                     history.push("/checkout");
@@ -39,7 +45,7 @@ const CartDropdown = ({ cartItems, history, dispatch }) => {
             >
                 GO TO CHECKOUT
             </CustomButton>
-        </div>
+        </CartDropdownContainer>
     );
 };
 

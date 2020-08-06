@@ -1,27 +1,30 @@
 import React from "react";
-import "./menu-item.styles.scss";
+import {
+    MenuItemContainer,
+    BackgroundImageContainer,
+    ContentContainer,
+    ContentTitle,
+    ContentSubtitle,
+} from "./menu-item.styles";
 
 import { withRouter } from "react-router-dom";
 
 // because of withRouter we have access to the history and match from route in App.js
 const MenuItem = ({ title, imageUrl, size, history, match, linkUrl }) => {
     return (
-        // inline styling at div
-        <div
-            className={`menu-item ${size}`}
+        <MenuItemContainer
+            size={size}
             onClick={() => history.push(`${match.url}${linkUrl}`)}
         >
-            <div
-                className={"background-image"}
-                style={{
-                    backgroundImage: `url(${imageUrl})`,
-                }}
+            <BackgroundImageContainer
+                className="background-image"
+                imageUrl={imageUrl}
             />
-            <div className="content">
-                <h1 className="title">{title}</h1>
-                <span className="subtitle">Shop Now!</span>
-            </div>
-        </div>
+            <ContentContainer className="content">
+                <ContentTitle>{title.toUpperCase()}</ContentTitle>
+                <ContentSubtitle>SHOP NOW</ContentSubtitle>
+            </ContentContainer>
+        </MenuItemContainer>
     );
 };
 

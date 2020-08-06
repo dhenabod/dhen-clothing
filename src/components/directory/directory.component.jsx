@@ -8,23 +8,15 @@ import { selectDirectorySection } from "../../redux/directory/directory.selector
 
 import { createStructuredSelector } from "reselect";
 
-import "./directory.styles.scss";
+import { DirectoryMenuContainer } from "./directory.styles";
 
 const Directory = ({ sections }) => {
     return (
-        <div className="directory-menu">
-            {sections.map(({ title, imageUrl, id, size, linkUrl }) => {
-                return (
-                    <MenuItem
-                        title={title}
-                        imageUrl={imageUrl}
-                        key={id}
-                        size={size}
-                        linkUrl={linkUrl}
-                    ></MenuItem>
-                );
-            })}
-        </div>
+        <DirectoryMenuContainer>
+            {sections.map(({ id, ...otherSectionProps }) => (
+                <MenuItem key={id} {...otherSectionProps} />
+            ))}
+        </DirectoryMenuContainer>
     );
 };
 
