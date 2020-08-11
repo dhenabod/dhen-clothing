@@ -32,6 +32,15 @@ class App extends React.Component {
             }
 
             setCurrentUser(userAuth);
+
+            // because there are values that we don't want to save in the database we destructure the CollectionsArray
+            // addCollectionAndDocuments(
+            //     "collections",
+            //     CollectionsArray.map(({ title, items }) => ({
+            //         title: title,
+            //         items: items,
+            //     }))
+            // );
         });
     }
     componentWillUnmount() {

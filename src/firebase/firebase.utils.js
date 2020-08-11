@@ -39,6 +39,40 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     return userRef;
 };
 
+export const addCollectionAndDocuments = async (
+    collectionKey,
+    objectsToAdd
+) => {
+    const collectionRef = firestore.collection(collectionKey);
+
+    const batch = firestore.batch();
+    objectsToAdd.forEach((obj) => {
+        const newDocRef = collectionRef.doc();
+        batch.set(newDocRef, obj);
+    });
+
+    return await batch.commit();
+};
+
+export const convertCollectionsSnapshotToMap = (collections) => {
+    const transformedCollection = collections.docs.map((doc) => {
+        const { title, items } = doc.data();
+
+        // encodeURI() - converts the string you  pass to it a version a url can read
+        // we don't write doc.data.id because id belongs to the doc snapshot object
+        return {
+            routeName: encodeURI(title.toLowerCase()),
+            id: doc.id,
+            title,
+            items,
+        };
+    });
+    return transformedCollection.reduce((acc, collection) => {
+        // sets the 1st value equal to the title but in lowercase = { hats: hatsCollection}
+        acc[collection.title.toLowerCase()] = collection;
+        return acc;
+    }, {});
+};
 firebase.initializeApp(config);
 
 export const auth = firebase.auth();
